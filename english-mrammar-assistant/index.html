@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语语法助手 - Professor Gong's Grammar App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #ffcc00;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .language-toggle {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            padding: 8px 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: #ffcc00;
+            color: #1e3c72;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 600px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-right: 1px solid #eaeaea;
+        }
+        
+        .chat-area {
+            flex: 2;
+            min-width: 400px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2a5298;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #ffcc00;
+        }
+        
+        .grammar-topic-list {
+            list-style-type: none;
+            margin-bottom: 30px;
+        }
+        
+        .grammar-topic {
+            background-color: white;
+            border-left: 5px solid #2a5298;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .grammar-topic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left-color: #ffcc00;
+        }
+        
+        .grammar-topic.active {
+            background-color: #e8f0fe;
+            border-left-color: #ffcc00;
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2a5298;
+        }
+        
+        .topic-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .input-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-row input, .input-row textarea {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            resize: none;
+        }
+        
+        .input-row textarea {
+            min-height: 120px;
+            line-height: 1.5;
+        }
+        
+        .voice-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .voice-btn {
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .voice-btn:hover {
+            background-color: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .voice-btn.recording {
+            background-color: #e53935;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(229, 57, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+        }
+        
+        .tts-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tts-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .tts-btn:hover {
+            background-color: #388e3c;
+            transform: scale(1.1);
+        }
+        
+        .tts-speed {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .message {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 85%;
+        }
+        
+        .user-message {
+            background-color: #e8f0fe;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-message {
+            background-color: #f0f2f5;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .user-avatar {
+            background-color: #2a5298;
+            color: white;
+        }
+        
+        .ai-avatar {
+            background-color: #ffcc00;
+            color: #1e3c72;
+        }
+        
+        .message-content {
+            flex: 1;
+        }
+        
+        .message-text {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .message-text p {
+            margin-bottom: 10px;
+        }
+        
+        .message-text ul, .message-text ol {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: right;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            padding: 10px;
+        }
+        
+        .loading-dots {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            background-color: #2a5298;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+        
+        .clear-btn {
+            background-color: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+            transition: all 0.3s;
+        }
+        
+        .clear-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .api-key-section {
+            background-color: #fff8e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #ffcc00;
+        }
+        
+        .api-key-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .api-key-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .save-api-btn {
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .api-status {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .api-status.valid {
+            color: #4caf50;
+        }
+        
+        .api-status.invalid {
+            color: #f44336;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #eaeaea;
+            background-color: #f8f9fa;
+            font-size: 0.9rem;
+        }
+        
+        .ai-disclaimer {
+            background-color: #fff8e1;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #5d4037;
+            border-left: 4px solid #ffcc00;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+        
+        /* 隐藏元素 */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 id="app-title">英语语法助手</h1>
+                        <div class="subtitle" id="app-subtitle">Professor Gong's AI Grammar Assistant</div>
+                    </div>
+                </div>
+                <div class="language-toggle">
+                    <button class="lang-btn active" id="lang-zh">中文</button>
+                    <button class="lang-btn" id="lang-en">English</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <h2 class="section-title"><i class="fas fa-book"></i> <span id="grammar-topics-title">语法主题</span></h2>
+                <ul class="grammar-topic-list" id="grammar-topics">
+                    <!-- 语法主题将通过JavaScript动态生成 -->
+                </ul>
+                
+                <div class="api-key-section">
+                    <div><i class="fas fa-key"></i> <strong id="api-key-title">DeepSeek API密钥</strong></div>
+                    <div class="api-key-input">
+                        <input type="password" id="api-key-input" placeholder="输入您的DeepSeek API密钥">
+                        <button class="save-api-btn" id="save-api-btn"><span id="save-api-text">保存</span></button>
+                    </div>
+                    <div class="api-status" id="api-status">
+                        <i class="fas fa-info-circle"></i> <span id="api-status-text">API密钥未设置</span>
+                    </div>
+                </div>
+                
+                <div class="ai-disclaimer">
+                    <i class="fas fa-robot"></i> <span id="ai-disclaimer-text">本应用使用DeepSeek AI提供语法讲解。请确保已设置有效的API密钥。</span>
+                </div>
+            </div>
+            
+            <div class="chat-area">
+                <div class="input-section">
+                    <div class="input-area">
+                        <div class="input-row">
+                            <input type="text" id="user-input" placeholder="请输入您的语法问题或句子..." maxlength="500">
+                        </div>
+                        <div class="input-row">
+                            <textarea id="user-textarea" placeholder="或者输入更长的文本进行分析..." maxlength="2000"></textarea>
+                        </div>
+                        
+                        <div class="voice-controls">
+                            <div>
+                                <button class="voice-btn" id="voice-input-btn">
+                                    <i class="fas fa-microphone"></i> <span id="voice-input-text">语音输入</span>
+                                </button>
+                                <button class="tts-btn" id="stop-tts-btn" title="停止语音">
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="tts-controls">
+                                <button class="tts-btn" id="tts-btn" title="朗读AI回复">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <div class="tts-speed">
+                                    <span id="speed-text">速度:</span>
+                                    <select id="tts-speed">
+                                        <option value="0.8">慢</option>
+                                        <option value="1" selected>正常</option>
+                                        <option value="1.2">快</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-container" id="chat-container">
+                    <!-- 聊天消息将通过JavaScript动态生成 -->
+                    <div class="message ai-message">
+                        <div class="avatar ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                <p id="welcome-text">您好！我是您的英语语法助手。我可以帮助您学习英语语法，分析句子结构，解答语法问题。请选择一个语法主题开始，或直接输入您的句子或问题。请先在左侧设置您的DeepSeek API密钥。</p>
+                                <p id="welcome-text-en" class="hidden">Hello! I'm your English Grammar Assistant. I can help you learn English grammar, analyze sentence structures, and answer grammar questions. Please select a grammar topic to begin, or directly enter your sentence or question. Please set your DeepSeek API key in the left panel first.</p>
+                            </div>
+                            <div class="message-time" id="current-time"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="clear-btn" id="clear-chat-btn">
+                    <i class="fas fa-trash-alt"></i> <span id="clear-chat-text">清除对话</span>
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <p id="footer-text">© 2023 英语语法助手 - 龚凤乾教授 | 专为中国学生设计的英语语法学习工具 | 使用DeepSeek AI</p>
+        </footer>
+    </div>
+
+    <script>
+        // 当前语言设置
+        let currentLang = 'zh';
+        
+        // 语言文本库
+        const languageTexts = {
+            zh: {
+                appTitle: "英语语法助手",
+                appSubtitle: "Professor Gong's AI Grammar Assistant",
+                grammarTopicsTitle: "语法主题",
+                aiDisclaimerText: "本应用使用DeepSeek AI提供语法讲解。请确保已设置有效的API密钥。",
+                voiceInputText: "语音输入",
+                speedText: "速度:",
+                clearChatText: "清除对话",
+                footerText: "© 2023 英语语法助手 - 龚凤乾教授 | 专为中国学生设计的英语语法学习工具 | 使用DeepSeek AI",
+                welcomeText: "您好！我是您的英语语法助手。我可以帮助您学习英语语法，分析句子结构，解答语法问题。请选择一个语法主题开始，或直接输入您的句子或问题。请先在左侧设置您的DeepSeek API密钥。",
+                inputPlaceholder: "请输入您的语法问题或句子...",
+                textareaPlaceholder: "或者输入更长的文本进行分析...",
+                apiKeyTitle: "DeepSeek API密钥",
+                saveApiText: "保存",
+                apiStatusText: "API密钥未设置",
+                grammarTopics: [
+                    { title: "时态 (Tenses)", desc: "现在时、过去时、将来时等" },
+                    { title: "条件句 (Conditionals)", desc: "if条件句的四种类型" },
+                    { title: "被动语态 (Passive Voice)", desc: "主动语态与被动语态的转换" },
+                    { title: "情态动词 (Modal Verbs)", desc: "can, could, may, might, must等" },
+                    { title: "冠词 (Articles)", desc: "a, an, the的用法区别" },
+                    { title: "介词 (Prepositions)", desc: "时间、地点、方位介词" },
+                    { title: "定语从句 (Relative Clauses)", desc: "who, which, that引导的从句" },
+                    { title: "虚拟语气 (Subjunctive Mood)", desc: "表达愿望、建议、假设" },
+                    { title: "非谓语动词 (Non-finite Verbs)", desc: "不定式、动名词、分词" },
+                    { title: "主谓一致 (Subject-Verb Agreement)", desc: "单复数主语与动词的匹配" }
+                ]
+            },
+            en: {
+                appTitle: "English Grammar Assistant",
+                appSubtitle: "Professor Gong's AI Grammar Assistant",
+                grammarTopicsTitle: "Grammar Topics",
+                aiDisclaimerText: "This app uses DeepSeek AI for grammar explanations. Please make sure you have set a valid API key.",
+                voiceInputText: "Voice Input",
+                speedText: "Speed:",
+                clearChatText: "Clear Chat",
+                footerText: "© 2023 English Grammar Assistant - Professor Gong | English grammar learning tool designed for Chinese students | Powered by DeepSeek AI",
+                welcomeText: "Hello! I'm your English Grammar Assistant. I can help you learn English grammar, analyze sentence structures, and answer grammar questions. Please select a grammar topic to begin, or directly enter your sentence or question. Please set your DeepSeek API key in the left panel first.",
+                inputPlaceholder: "Please enter your grammar question or sentence...",
+                textareaPlaceholder: "Or enter longer text for analysis...",
+                apiKeyTitle: "DeepSeek API Key",
+                saveApiText: "Save",
+                apiStatusText: "API key not set",
+                grammarTopics: [
+                    { title: "Tenses", desc: "Present, past, future tenses, etc." },
+                    { title: "Conditionals", desc: "Four types of if conditionals" },
+                    { title: "Passive Voice", desc: "Active to passive voice conversion" },
+                    { title: "Modal Verbs", desc: "can, could, may, might, must, etc." },
+                    { title: "Articles", desc: "Differences between a, an, the" },
+                    { title: "Prepositions", desc: "Time, place, and direction prepositions" },
+                    { title: "Relative Clauses", desc: "Clauses with who, which, that" },
+                    { title: "Subjunctive Mood", desc: "Expressing wishes, suggestions, hypotheses" },
+                    { title: "Non-finite Verbs", desc: "Infinitives, gerunds, participles" },
+                    { title: "Subject-Verb Agreement", desc: "Matching singular/plural subjects with verbs" }
+                ]
+            }
+        };
+        
+        // 应用状态
+        let isRecording = false;
+        let recognition = null;
+        let currentUtterance = null;
+        let chatHistory = [];
+        let deepSeekApiKey = '';
+        
+        // DOM元素
+        const langZhBtn = document.getElementById('lang-zh');
+        const langEnBtn = document.getElementById('lang-en');
+        const appTitle = document.getElementById('app-title');
+        const appSubtitle = document.getElementById('app-subtitle');
+        const grammarTopicsTitle = document.getElementById('grammar-topics-title');
+        const grammarTopicsList = document.getElementById('grammar-topics');
+        const aiDisclaimerText = document.getElementById('ai-disclaimer-text');
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+        const voiceInputText = document.getElementById('voice-input-text');
+        const speedText = document.getElementById('speed-text');
+        const clearChatBtn = document.getElementById('clear-chat-btn');
+        const clearChatText = document.getElementById('clear-chat-text');
+        const footerText = document.getElementById('footer-text');
+        const welcomeText = document.getElementById('welcome-text');
+        const welcomeTextEn = document.getElementById('welcome-text-en');
+        const userInput = document.getElementById('user-input');
+        const userTextarea = document.getElementById('user-textarea');
+        const chatContainer = document.getElementById('chat-container');
+        const ttsBtn = document.getElementById('tts-btn');
+        const stopTtsBtn = document.getElementById('stop-tts-btn');
+        const ttsSpeed = document.getElementById('tts-speed');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveApiBtn = document.getElementById('save-api-btn');
+        const apiStatus = document.getElementById('api-status');
+        const apiStatusText = document.getElementById('api-status-text');
+        const apiKeyTitle = document.getElementById('api-key-title');
+        const saveApiText = document.getElementById('save-api-text');
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前时间
+            const currentTimeElement = document.getElementById('current-time');
+            const now = new Date();
+            currentTimeElement.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // 初始化语法主题列表
+            initializeGrammarTopics();
+            
+            // 初始化事件监听器
+            initializeEventListeners();
+            
+            // 初始化语音识别（如果浏览器支持）
+            initializeSpeechRecognition();
+            
+            // 从本地存储加载API密钥
+            loadApiKeyFromStorage();
+            
+            // 设置默认语言
+            changeLanguage('zh');
+        });
+        
+        // 初始化语法主题列表
+        function initializeGrammarTopics() {
+            const topics = languageTexts.zh.grammarTopics;
+            
+            topics.forEach((topic, index) => {
+                const topicElement = document.createElement('li');
+                topicElement.className = 'grammar-topic';
+                topicElement.innerHTML = `
+                    <div class="topic-title">${topic.title}</div>
+                    <div class="topic-desc">${topic.desc}</div>
+                `;
+                
+                topicElement.addEventListener('click', () => {
+                    // 移除所有active类
+                    document.querySelectorAll('.grammar-topic').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // 添加active类到当前主题
+                    topicElement.classList.add('active');
+                    
+                    // 发送主题选择消息
+                    sendTopicMessage(topic.title, topic.desc);
+                });
+                
+                grammarTopicsList.appendChild(topicElement);
+            });
+        }
+        
+        // 初始化事件监听器
+        function initializeEventListeners() {
+            // 语言切换
+            langZhBtn.addEventListener('click', () => changeLanguage('zh'));
+            langEnBtn.addEventListener('click', () => changeLanguage('en'));
+            
+            // 语音输入按钮
+            voiceInputBtn.addEventListener('click', toggleVoiceInput);
+            
+            // 文本转语音按钮
+            ttsBtn.addEventListener('click', textToSpeech);
+            stopTtsBtn.addEventListener('click', stopTextToSpeech);
+            
+            // 清除聊天按钮
+            clearChatBtn.addEventListener('click', clearChat);
+            
+            // 输入框回车键发送
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            });
+            
+            // 文本域Ctrl+Enter发送
+            userTextarea.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            });
+            
+            // API密钥保存按钮
+            saveApiBtn.addEventListener('click', saveApiKey);
+            
+            // API密钥输入框回车保存
+            apiKeyInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveApiKey();
+                }
+            });
+        }
+        
+        // 切换语言
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // 更新语言按钮状态
+            langZhBtn.classList.toggle('active', lang === 'zh');
+            langEnBtn.classList.toggle('active', lang === 'en');
+            
+            // 获取当前语言的文本
+            const texts = languageTexts[lang];
+            
+            // 更新UI文本
+            appTitle.textContent = texts.appTitle;
+            appSubtitle.textContent = texts.appSubtitle;
+            grammarTopicsTitle.textContent = texts.grammarTopicsTitle;
+            aiDisclaimerText.textContent = texts.aiDisclaimerText;
+            voiceInputText.textContent = texts.voiceInputText;
+            speedText.textContent = texts.speedText;
+            clearChatText.textContent = texts.clearChatText;
+            footerText.textContent = texts.footerText;
+            userInput.placeholder = texts.inputPlaceholder;
+            userTextarea.placeholder = texts.textareaPlaceholder;
+            apiKeyTitle.textContent = texts.apiKeyTitle;
+            saveApiText.textContent = texts.saveApiText;
+            
+            // 更新欢迎消息
+            if (lang === 'zh') {
+                welcomeText.classList.remove('hidden');
+                welcomeTextEn.classList.add('hidden');
+            } else {
+                welcomeText.classList.add('hidden');
+                welcomeTextEn.classList.remove('hidden');
+            }
+            
+            // 更新API状态文本
+            updateApiStatusText();
+            
+            // 更新语法主题列表
+            updateGrammarTopics(lang);
+        }
+        
+        // 更新API状态文本
+        function updateApiStatusText() {
+            if (deepSeekApiKey) {
+                apiStatusText.textContent = currentLang === 'zh' ? 'API密钥已设置' : 'API key is set';
+                apiStatus.className = 'api-status valid';
+                apiStatus.innerHTML = `<i class="fas fa-check-circle"></i> <span id="api-status-text">${apiStatusText.textContent}</span>`;
+            } else {
+                apiStatusText.textContent = currentLang === 'zh' ? 'API密钥未设置' : 'API key not set';
+                apiStatus.className = 'api-status invalid';
+                apiStatus.innerHTML = `<i class="fas fa-info-circle"></i> <span id="api-status-text">${apiStatusText.textContent}</span>`;
+            }
+        }
+        
+        // 更新语法主题列表
+        function updateGrammarTopics(lang) {
+            const topics = languageTexts[lang].grammarTopics;
+            const topicElements = document.querySelectorAll('.grammar-topic');
+            
+            topicElements.forEach((element, index) => {
+                if (topics[index]) {
+                    const titleElement = element.querySelector('.topic-title');
+                    const descElement = element.querySelector('.topic-desc');
+                    
+                    titleElement.textContent = topics[index].title;
+                    descElement.textContent = topics[index].desc;
+                }
+            });
+        }
+        
+        // 从本地存储加载API密钥
+        function loadApiKeyFromStorage() {
+            const savedKey = localStorage.getItem('deepSeekApiKey');
+            if (savedKey) {
+                deepSeekApiKey = savedKey;
+                apiKeyInput.value = '••••••••••••••••'; // 显示掩码
+                updateApiStatusText();
+            }
+        }
+        
+        // 保存API密钥
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            
+            if (!key) {
+                alert(currentLang === 'zh' ? '请输入API密钥' : 'Please enter API key');
+                return;
+            }
+            
+            // 如果是掩码值，不更新
+            if (key === '••••••••••••••••') {
+                return;
+            }
+            
+            deepSeekApiKey = key;
+            localStorage.setItem('deepSeekApiKey', key);
+            
+            // 显示掩码
+            apiKeyInput.value = '••••••••••••••••';
+            
+            // 更新状态
+            updateApiStatusText();
+            
+            // 显示成功消息
+            const message = currentLang === 'zh' ? 'API密钥已保存' : 'API key saved';
+            showToast(message, 'success');
+        }
+        
+        // 显示Toast消息
+        function showToast(message, type = 'info') {
+            // 移除现有的toast
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.className = `toast-message toast-${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: ${type === 'success' ? '#4caf50' : '#2196f3'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // 发送主题选择消息
+        function sendTopicMessage(topicTitle, topicDesc) {
+            if (!deepSeekApiKey) {
+                const message = currentLang === 'zh' 
+                    ? '请先设置DeepSeek API密钥' 
+                    : 'Please set DeepSeek API key first';
+                showToast(message, 'info');
+                return;
+            }
+            
+            const messageText = currentLang === 'zh' 
+                ? `我想学习关于"${topicTitle}"的语法知识。` 
+                : `I want to learn about "${topicTitle}" grammar.`;
+            
+            // 添加用户消息
+            addMessageToChat('user', messageText);
+            
+            // 发送到DeepSeek API
+            sendToDeepSeekAPI(messageText, topicTitle);
+        }
+        
+        // 发送用户消息
+        function sendUserMessage() {
+            const inputText = userInput.value.trim();
+            const textareaText = userTextarea.value.trim();
+            
+            if (!inputText && !textareaText) {
+                return;
+            }
+            
+            if (!deepSeekApiKey) {
+                const message = currentLang === 'zh' 
+                    ? '请先设置DeepSeek API密钥' 
+                    : 'Please set DeepSeek API key first';
+                showToast(message, 'info');
+                return;
+            }
+            
+            const messageText = inputText || textareaText;
+            
+            // 添加用户消息到聊天
+            addMessageToChat('user', messageText);
+            
+            // 清空输入框
+            userInput.value = '';
+            userTextarea.value = '';
+            
+            // 发送到DeepSeek API
+            sendToDeepSeekAPI(messageText);
+        }
+        
+        // 添加消息到聊天
+        function addMessageToChat(sender, text) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${sender}-message`;
+            
+            const avatarIcon = sender === 'user' ? 'fas fa-user' : 'fas fa-robot';
+            const avatarClass = sender === 'user' ? 'user-avatar' : 'ai-avatar';
+            
+            messageElement.innerHTML = `
+                <div class="avatar ${avatarClass}">
+                    <i class="${avatarIcon}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${formatMessageText(text)}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageElement);
+            
+            // 滚动到底部
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // 保存到聊天历史
+            chatHistory.push({
+                sender,
+                text,
+                time: timeString
+            });
+        }
+        
+        // 格式化消息文本
+        function formatMessageText(text) {
+            // 将换行符转换为段落
+            const paragraphs = text.split('\n').filter(p => p.trim() !== '');
+            
+            if (paragraphs.length === 1) {
+                return `<p>${escapeHtml(text)}</p>`;
+            }
+            
+            return paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('');
+        }
+        
+        // 转义HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // 发送到DeepSeek API
+        async function sendToDeepSeekAPI(userMessage, topicTitle = null) {
+            // 显示加载指示器
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'message ai-message';
+            loadingElement.innerHTML = `
+                <div class="avatar ai-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="loading">
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span id="loading-text">${currentLang === 'zh' ? '正在思考...' : 'Thinking...'}</span>
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(loadingElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            try {
+                // 构建系统提示词
+                const systemPrompt = currentLang === 'zh' 
+                    ? `你是一位专业的英语语法教授，专门帮助中国学生学习英语语法。你的名字是龚教授（Professor Gong）。请用清晰、准确、亲切的语气解释英语语法概念，并使用中英文双语进行讲解，确保学生能够充分理解。如果用户询问特定语法主题，请提供详细的解释、规则、例句和常见错误。请确保回复内容结构清晰，使用适当的标题和分段，并且不要读出任何符号（如连字符、斜杠、逗号、井号等）。`
+                    : `You are a professional English grammar professor specializing in helping Chinese students learn English grammar. Your name is Professor Gong. Please explain English grammar concepts clearly, accurately, and in a friendly tone, using both Chinese and English to ensure students fully understand. If the user asks about a specific grammar topic, provide detailed explanations, rules, example sentences, and common mistakes. Ensure your response is well-structured with appropriate headings and sections, and do not read out any symbols (such as hyphens, slashes, commas, hashtags, etc.).`;
+                
+                // 如果有主题标题，添加到提示词中
+                let fullPrompt = systemPrompt;
+                if (topicTitle) {
+                    fullPrompt += currentLang === 'zh' 
+                        ? `\n\n用户想学习关于"${topicTitle}"的语法知识。请提供详细、全面的解释。`
+                        : `\n\nThe user wants to learn about "${topicTitle}" grammar. Please provide a detailed, comprehensive explanation.`;
+                }
+                
+                // 准备请求数据
+                const requestData = {
+                    model: "deepseek-chat",
+                    messages: [
+                        {
+                            role: "system",
+                            content: fullPrompt
+                        },
+                        {
+                            role: "user",
+                            content: userMessage
+                        }
+                    ],
+                    max_tokens: 2000,
+                    temperature: 0.7,
+                    stream: false
+                };
+                
+                // 发送请求到后端API
+                const response = await fetch('/.netlify/functions/deepseek-api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        apiKey: deepSeekApiKey,
+                        messages: requestData.messages,
+                        max_tokens: requestData.max_tokens,
+                        temperature: requestData.temperature
+                    })
+                });
+                
+                // 移除加载指示器
+                loadingElement.remove();
+                
+                if (!response.ok) {
+                    let errorMessage = currentLang === 'zh' 
+                        ? 'API请求失败，请检查API密钥和网络连接。' 
+                        : 'API request failed. Please check your API key and network connection.';
+                    
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.error) {
+                            errorMessage = errorData.error;
+                        }
+                    } catch (e) {
+                        // 忽略JSON解析错误
+                    }
+                    
+                    throw new Error(errorMessage);
+                }
+                
+                const data = await response.json();
+                
+                // 添加AI响应到聊天
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const aiResponse = data.choices[0].message.content;
+                    addMessageToChat('ai', aiResponse);
+                } else {
+                    throw new Error(currentLang === 'zh' ? 'API响应格式不正确' : 'Invalid API response format');
+                }
+                
+            } catch (error) {
+                // 移除加载指示器
+                loadingElement.remove();
+                
+                // 添加错误消息
+                addMessageToChat('ai', currentLang === 'zh' 
+                    ? `抱歉，处理您的请求时出现错误：${error.message}` 
+                    : `Sorry, an error occurred while processing your request: ${error.message}`);
+                
+                console.error('API Error:', error);
+            }
+        }
+        
+        // 初始化语音识别
+        function initializeSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = currentLang === 'zh' ? 'zh-CN' : 'en-US';
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    
+                    // 将识别结果填入输入框
+                    if (userTextarea.value.trim() === '') {
+                        userInput.value = transcript;
+                    } else {
+                        userTextarea.value += ' ' + transcript;
+                    }
+                    
+                    // 停止录音状态
+                    stopVoiceInput();
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('语音识别错误:', event.error);
+                    stopVoiceInput();
+                    
+                    // 显示错误消息
+                    addMessageToChat('ai', currentLang === 'zh' 
+                        ? '抱歉，语音识别出现错误。请确保您已经允许麦克风权限，并重试。' 
+                        : 'Sorry, there was an error with speech recognition. Please make sure you have allowed microphone permission and try again.');
+                };
+            } else {
+                // 浏览器不支持语音识别
+                voiceInputBtn.disabled = true;
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> <span id="voice-input-text">语音不可用</span>';
+                
+                if (currentLang === 'en') {
+                    voiceInputText.textContent = 'Voice Unavailable';
+                }
+            }
+        }
+        
+        // 切换语音输入
+        function toggleVoiceInput() {
+            if (!recognition) {
+                addMessageToChat('ai', currentLang === 'zh' 
+                    ? '您的浏览器不支持语音识别功能。请尝试使用Chrome或Edge浏览器。' 
+                    : 'Your browser does not support speech recognition. Please try Chrome or Edge browser.');
+                return;
+            }
+            
+            if (!isRecording) {
+                startVoiceInput();
+            } else {
+                stopVoiceInput();
+            }
+        }
+        
+        // 开始语音输入
+        function startVoiceInput() {
+            try {
+                recognition.lang = currentLang === 'zh' ? 'zh-CN' : 'en-US';
+                recognition.start();
+                isRecording = true;
+                voiceInputBtn.classList.add('recording');
+                voiceInputBtn.innerHTML = `<i class="fas fa-microphone"></i> <span id="voice-input-text">${currentLang === 'zh' ? '录音中...' : 'Recording...'}</span>`;
+            } catch (error) {
+                console.error('启动语音识别失败:', error);
+            }
+        }
+        
+        // 停止语音输入
+        function stopVoiceInput() {
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+            
+            isRecording = false;
+            voiceInputBtn.classList.remove('recording');
+            voiceInputBtn.innerHTML = `<i class="fas fa-microphone"></i> <span id="voice-input-text">${currentLang === 'zh' ? '语音输入' : 'Voice Input'}</span>`;
+        }
+        
+        // 文本转语音
+        function textToSpeech() {
+            // 停止当前的语音播放
+            stopTextToSpeech();
+            
+            // 获取最后一条AI消息
+            const aiMessages = document.querySelectorAll('.ai-message');
+            if (aiMessages.length === 0) return;
+            
+            const lastAiMessage = aiMessages[aiMessages.length - 1];
+            const messageText = lastAiMessage.querySelector('.message-text').textContent;
+            
+            // 清理文本：移除所有符号（确保不会读出符号）
+            const cleanText = cleanTextForTTS(messageText);
+            
+            // 创建语音合成实例
+            currentUtterance = new SpeechSynthesisUtterance(cleanText);
+            
+            // 设置语言
+            currentUtterance.lang = currentLang === 'zh' ? 'zh-CN' : 'en-US';
+            
+            // 设置语速
+            currentUtterance.rate = parseFloat(ttsSpeed.value);
+            
+            // 开始播放
+            window.speechSynthesis.speak(currentUtterance);
+            
+            // 播放结束后清除currentUtterance引用
+            currentUtterance.onend = function() {
+                currentUtterance = null;
+            };
+        }
+        
+        // 清理文本用于TTS（移除所有符号）
+        function cleanTextForTTS(text) {
+            // 替换常见符号为空格或适当文本
+            return text
+                .replace(/[.,!?;:]/g, ' ')  // 标点符号替换为空格
+                .replace(/[\/\\\-_]/g, ' ')  // 斜杠、反斜杠、连字符、下划线替换为空格
+                .replace(/[#@$%^&*()\[\]{}]/g, ' ')  // 各种符号替换为空格
+                .replace(/\s+/g, ' ')  // 多个空格合并为一个
+                .trim();
+        }
+        
+        // 停止文本转语音
+        function stopTextToSpeech() {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            currentUtterance = null;
+        }
+        
+        // 清除聊天
+        function clearChat() {
+            // 清除聊天容器中除欢迎消息外的所有消息
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                if (!message.querySelector('#welcome-text') && !message.querySelector('#welcome-text-en')) {
+                    message.remove();
+                }
+            });
+            
+            // 清除聊天历史
+            chatHistory = [];
+            
+            // 移除所有语法主题的active类
+            document.querySelectorAll('.grammar-topic').forEach(topic => {
+                topic.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>

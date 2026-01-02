@@ -1,0 +1,25 @@
+{
+  "name": "english-grammar-assistant",
+  "version": "1.0.0",
+  "description": "English Grammar Assistant with DeepSeek AI",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "english",
+    "grammar",
+    "ai",
+    "education",
+    "deepseek"
+  ],
+  "author": "Professor Gong Fengqian",
+  "license": "MIT"
+}
